@@ -1,0 +1,22 @@
+<h2>Edit Your Profile</h2>
+
+<form action="/events/<%= @event.id %>" method="post">
+	<input type="hidden" name="authenticity_token" value="<%=form_authenticity_token%>">
+	<input type="hidden" name="_method" value="patch">
+	<p>Name:<input type="text" name="event[name]" value="<%= @event.name %>"></p>
+
+	<p>Date: <input type="date" name="event[date]" value="<%= @event.date %>"></p>
+
+	<p>
+		Location: <input type="text" name="event[city]" value="<%= @event.city %>">
+
+		<select name="event[state]">
+			<option value="<%=current_user.state%>"><%=current_user.state%></option>
+			<% @states.each do |state| %>
+			<option value="<%=state%>"><%=state%></option>
+			<% end %>
+		</select>
+	</p>
+
+	<p><button type="submit">Update Event</button></p>
+</form>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+		.messages {
+			text-align: left;
+			border:solid black 1px;
+			padding:5px;
+			width: 200px;
+			height: 250px;
+			overflow: scroll;
+
+		}
+
+		.event_info, .discuss {
+			display: inline-block;
+			vertical-align: top;
+			margin: 30px;
+		}
+
+		textarea {
+			width: 206px;
+			border-collapse: collapse;
+		}
+
+		table {
+			
+			border: 2px solid #dddddd;
+		}
+		td, th {
+			
+			text-align: left;
+			padding: 5px;
+		}
+		tr:nth-child(even) {
+    		background-color: #dddddd;
+    	}
+
+	</style>
+</head>
+<body>
+<div>
+<a href="/events"> Events Dashboard</a>
+</div>
+<div class="event_info">
+<h2><%= @event.name %></h2>
+<p>Host: <%= @event.user.first_name %> <%= @event.user.last_name %></p>
+<p>Date: <%= @event.date %></p>
+<p>Location: <%= @event.city %>, <%= @event.state %></p>
+<p>People who are joining the event: <%= @event.attendees.count %></p>
+<table>
+	<tr>
+		<th>Name</th>
+		<th>Location</th>
+		<th>State</th>
+	</tr>
+	<% @event.attendees.each do |person| %>
+	<tr>
+		<td><%= person.first_name %> <%= person.last_name %></td>
+		<td><%= person.city %></td>
+		<td><%= person.state %></td>
+	</tr>
+	<% end %>
+</table>
+</div>
+<div class="discuss">
+	<p>Discussion about this event:</p>
+	<div class="messages">
+		<% @event.messages.each do |message| %>
+			<p><small><%= message.user.first_name %> says: <%= message.content %></small></p>
+			<hr>
+		<% end %>
+	</div>
+	<form action="/messages" method="post">
+        <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>" />
+        <input type="hidden" name="message[event_id]" value="<%= @event.id %>">
+
+        <textarea name="message[content]"></textarea>
+
+        <p><button type="submit">Submit Comments</button></p>
+    </form>
+</div>
+
+
+</body>
+</html>
